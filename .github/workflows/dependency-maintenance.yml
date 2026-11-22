@@ -1,0 +1,58 @@
+name: Dependency audit (read-only)
+
+on:
+  push:
+    branches:
+      - port-preview-features-production
+    paths:
+      - ".github/workflows/dependency-maintenance.yml"
+      - "package.json"
+      - "package-lock.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout working branch
+        uses: actions/checkout@v4
+        with:
+          ref: port-preview-features-production
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts
+      - name: Audit dependencies
+        shell: bash
+        run: |
+          npm audit --json > npm-audit.json || true
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const report = JSON.parse(fs.readFileSync('npm-audit.json', 'utf8'));
+          if (report.error) {
+            console.error('npm audit could not complete:', report.error.summary || report.error.code || 'unknown error');
+            process.exit(1);
+          }
+          const counts = report.metadata?.vulnerabilities || {};
+          console.log('Dependency audit:', JSON.stringify(counts));
+          for (const [name, item] of Object.entries(report.vulnerabilities || {})) {
+            console.log(JSON.stringify({
+              name,
+              severity: item.severity,
+              direct: item.isDirect,
+              range: item.range,
+              fixAvailable: item.fixAvailable
+            }));
+          }
+          if ((counts.high || 0) > 0 || (counts.critical || 0) > 0) {
+            console.error('High or critical vulnerabilities require a reviewed, explicit dependency update.');
+            process.exit(1);
+          }
+          NODE

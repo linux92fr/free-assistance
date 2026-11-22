@@ -1,0 +1,57 @@
+name: Validate admin migration (no deployment)
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "src/**"
+      - "package.json"
+      - "package-lock.json"
+      - ".env.production"
+      - ".env.preview"
+      - "wrangler.jsonc"
+      - "wrangler.preview.jsonc"
+      - ".github/workflows/validate-admin-migration.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install dependencies
+        run: npm ci
+      - name: Audit locked dependencies
+        run: npm audit --audit-level=high
+      - name: Build production assets
+        run: npm run build:production
+      - name: Validate production Worker configuration
+        run: npx wrangler deploy --dry-run --config wrangler.jsonc
+      - name: Build preview assets
+        run: npm run build:preview
+      - name: Validate preview Worker configuration
+        run: npx wrangler deploy --dry-run --config wrangler.preview.jsonc
+      - name: Check Worker syntax
+        run: node --check src/worker.js
+      - name: Verify preview authentication and webhook guards
+        run: |
+          node --input-type=module <<'NODE'
+          const base = "https://fd-preview.linux92fr.workers.dev";
+          const admin = await fetch(base + "/api/admin/users");
+          if (admin.status !== 401) throw new Error("Expected unauthenticated admin request to return 401, got " + admin.status);
+          const webhook = await fetch(base + "/api/webhooks/neon-auth", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ event_type: "send.otp", event_id: "ci-unsigned-webhook-check" })
+          });
+          if (webhook.status !== 401) throw new Error("Expected unsigned Neon webhook to return 401, got " + webhook.status);
+          console.log("Preview guards passed: unauthenticated admin denied; unsigned webhook rejected.");
+          NODE

@@ -1,0 +1,44 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "fd-preview",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-11-17",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "hyperdrive": [
+    {
+      "binding": "HYPERDRIVE",
+      "id": "e848868f019a41cdb5512566815843d8"
+    }
+  ],
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": true
+  },
+  "observability": {
+    "enabled": true
+  },
+  "d1_databases": [
+    {
+      "binding": "SURVEYS_DB",
+      "database_name": "fd-surveys-preview",
+      "database_id": "768387ca-bfd2-40e6-9632-a19d07a6fd0d"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "MEDIA",
+      "bucket_name": "fd-media-preview"
+    }
+  ],
+  "vars": {
+    "NEON_AUTH_URL": "https://ep-crimson-wave-b972yi2i.neonauth.c-7.eu-central-1.aws.neon.tech/neondb/auth",
+    "NEON_PROJECT_ID": "delicate-lake-24433548",
+    "NEON_BRANCH_ID": "br-square-shadow-b90emym2",
+    "ALLOWED_ORIGINS": "https://fd-preview.linux92fr.workers.dev",
+    "NEWSLETTER_SIMULATOR": "true"
+  }
+}

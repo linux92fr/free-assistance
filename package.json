@@ -1,0 +1,30 @@
+{
+  "name": "fo-free-distributions",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "npm run build && wrangler deploy",
+    "build:preview": "vite build --mode preview",
+    "build:production": "vite build --mode production",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@neondatabase/auth": "0.7.0-beta",
+    "jose": "^6.1.0",
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "vite": "^6.4.1",
+    "wrangler": "^4.163.0"
+  },
+  "overrides": {
+    "rollup": "4.68.4",
+    "better-auth": "1.7.16",
+    "@better-auth/drizzle-adapter": "1.7.16",
+    "zod": "4.6.7"
+  }
+}

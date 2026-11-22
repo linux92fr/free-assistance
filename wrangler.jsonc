@@ -1,0 +1,43 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "fd",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-11-17",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "hyperdrive": [
+    {
+      "binding": "HYPERDRIVE",
+      "id": "66751785691047d49512946dc959d949"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "MEDIA",
+      "bucket_name": "fd-media"
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "SURVEYS_DB",
+      "database_name": "fd-surveys-production",
+      "database_id": "68507ec6-1b38-413b-bcaa-4fe9d0948d0e"
+    }
+  ],
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": true
+  },
+  "observability": {
+    "enabled": true
+  },
+  "vars": {
+    "NEON_AUTH_URL": "https://ep-sweet-resonance-b9ov2yaa.neonauth.c-7.eu-central-1.aws.neon.tech/neondb/auth",
+    "NEON_PROJECT_ID": "delicate-lake-24433548",
+    "NEON_BRANCH_ID": "br-aged-sky-b9610vxa",
+    "ALLOWED_ORIGINS": "https://fd.focom-iliad.fr,https://fd.linux92fr.workers.dev"
+  }
+}
