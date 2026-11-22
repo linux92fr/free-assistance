@@ -1,7 +1,7 @@
 {
-  // Dedicated Worker for the Free Assistance cover page.
+  // Dedicated Worker connected to fa.focom-iliad.fr.
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "fa-free-assistance",
+  "name": "free-assistance",
   "main": "src/worker.js",
   "compatibility_date": "2026-11-17",
   "assets": {

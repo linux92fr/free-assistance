@@ -24,6 +24,7 @@ test("the cover page identifies every integrated entity", async () => {
 test("the deployment targets the dedicated Free Assistance Worker", async () => {
   const config = await readFile(wranglerUrl, "utf8");
 
-  assert.match(config, /"name":\s*"fa-free-assistance"/);
+  assert.match(config, /"name":\s*"free-assistance"/);
+  assert.doesNotMatch(config, /"name":\s*"fa-free-assistance"/);
   assert.doesNotMatch(config, /"name":\s*"fd"/);
 });

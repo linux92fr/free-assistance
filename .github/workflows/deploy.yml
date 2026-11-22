@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: deploy-fa-free-assistance-production
+  group: deploy-free-assistance-production
   cancel-in-progress: true
 
 jobs:
