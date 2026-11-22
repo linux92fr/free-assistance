@@ -1,96 +1,49 @@
-import test from "node:test";
 import assert from "node:assert/strict";
+import test from "node:test";
 import worker from "../src/worker.js";
 
-function request(path, options = {}) {
-  return new Request("https://fd.focom-iliad.fr" + path, options);
-}
+const origin = "https://fa.focom-iliad.fr";
 
-test("GET /admin serves the SPA entry point", async () => {
-  let requestedUrl = "";
+test("GET requests are served by the static asset binding", async () => {
+  let requestedPath = "";
   const env = {
     ASSETS: {
-      async fetch(assetRequest) {
-        requestedUrl = new URL(assetRequest.url).pathname;
-        return new Response("<!doctype html><html><body>admin app</body></html>", {
-          headers: { "content-type": "text/html; charset=utf-8" },
+      async fetch(request) {
+        requestedPath = new URL(request.url).pathname;
+        return new Response("cover", {
+          status: 200,
+          headers: { "Content-Type": "text/html; charset=utf-8" },
         });
       },
     },
   };
 
-  const response = await worker.fetch(request("/admin"), env, {});
+  const response = await worker.fetch(new Request(origin + "/"), env);
+
   assert.equal(response.status, 200);
-  assert.equal(requestedUrl, "/index.html");
-  assert.match(await response.text(), /admin app/);
+  assert.equal(requestedPath, "/");
+  assert.equal(await response.text(), "cover");
+  assert.equal(response.headers.get("X-Content-Type-Options"), "nosniff");
+  assert.match(response.headers.get("Content-Security-Policy") || "", /script-src 'none'/);
 });
 
-test("GET /admin/ also serves the SPA entry point", async () => {
-  let requestedUrl = "";
+test("write methods fail closed without reaching the asset binding", async () => {
+  let assetWasCalled = false;
   const env = {
     ASSETS: {
-      async fetch(assetRequest) {
-        requestedUrl = new URL(assetRequest.url).pathname;
-        return new Response("admin app");
+      async fetch() {
+        assetWasCalled = true;
+        return new Response("unexpected");
       },
     },
   };
 
-  const response = await worker.fetch(request("/admin/"), env, {});
-  assert.equal(response.status, 200);
-  assert.equal(requestedUrl, "/index.html");
-});
+  const response = await worker.fetch(
+    new Request(origin + "/", { method: "POST", body: "test" }),
+    env,
+  );
 
-test("protected public APIs reject requests without a site-access session", async () => {
-  const response = await worker.fetch(request("/api/health"), {}, {});
-  assert.equal(response.status, 401);
-  assert.deepEqual(await response.json(), { error: "SITE_ACCESS_REQUIRED" });
-});
-
-test("admin APIs reject requests without a Neon Auth bearer token", async () => {
-  const response = await worker.fetch(request("/api/admin/maintenance"), {}, {});
-  assert.equal(response.status, 401);
-  assert.deepEqual(await response.json(), { error: "TOKEN_MISSING" });
-});
-
-test("site access status is safely unauthenticated when signing is not configured", async () => {
-  const response = await worker.fetch(request("/api/site-access/status"), {}, {});
-  assert.equal(response.status, 200);
-  assert.deepEqual(await response.json(), { authenticated: false });
-});
-
-test("the unauthenticated home page presents the animated preparation screen", async () => {
-  const response = await worker.fetch(request("/"), {}, {});
-  assert.equal(response.status, 200);
-  const page = await response.text();
-  assert.match(page, /Notre site se prépare/);
-  assert.match(page, /Mise en ligne progressive/);
-  assert.match(page, /href="\/acces"/);
-});
-
-test("the access page remains available without a site-access session", async () => {
-  const response = await worker.fetch(request("/acces"), {}, {});
-  assert.equal(response.status, 200);
-  const page = await response.text();
-  assert.match(page, /Accès|accès/);
-  assert.match(page, /logo-fd\.webp/);
-});
-
-test("the access page logo remains available without a site-access session", async () => {
-  let requestedUrl = "";
-  const env = {
-    ASSETS: {
-      async fetch(assetRequest) {
-        requestedUrl = new URL(assetRequest.url).pathname;
-        return new Response("logo", {
-          headers: { "content-type": "image/webp" },
-        });
-      },
-    },
-  };
-
-  const response = await worker.fetch(request("/logo-fd.webp"), env, {});
-  assert.equal(response.status, 200);
-  assert.equal(requestedUrl, "/logo-fd.webp");
-  assert.equal(response.headers.get("content-type"), "image/webp");
+  assert.equal(response.status, 405);
+  assert.equal(response.headers.get("Allow"), "GET, HEAD");
+  assert.equal(assetWasCalled, false);
 });

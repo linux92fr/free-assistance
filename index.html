@@ -3,24 +3,484 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#c8102e" />
+    <meta name="theme-color" content="#121114" />
+    <meta
+      name="description"
+      content="Le nouveau site Free Assistance se prépare. Une adresse commune pour les équipes issues de Protelco, de l’UES MCRA, de Centrapel, de Certicall et d’Equaline."
+    />
+    <link rel="canonical" href="https://fa.focom-iliad.fr/" />
     <link rel="icon" type="image/png" sizes="112x112" href="/logo-focom-fond-rouge.png" />
     <link rel="apple-touch-icon" href="/logo-focom-fond-rouge.png" />
-    <meta name="description" content="FO Free Distribution : actualités, revendications, droits et informations syndicales pour les salariés des boutiques Free. FO vous informe et vous accompagne." />
-    <link rel="canonical" href="https://fd.focom-iliad.fr/" />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="FO Free Distribution" />
-    <meta property="og:title" content="FO Free Distribution – FOCOM" />
-    <meta property="og:description" content="Actualités, revendications et droits des salariés des boutiques Free. Retrouvez les informations de FO Free Distribution." />
-    <meta property="og:url" content="https://fd.focom-iliad.fr/" />
-    <meta property="og:image" content="https://fd.focom-iliad.fr/logo-focom-fond-rouge.png" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="FO Free Distribution – FOCOM" />
-    <meta name="twitter:description" content="Actualités, revendications et droits des salariés des boutiques Free." />
-    <title>FO Free Distribution – FOCOM</title>
+    <meta property="og:site_name" content="Free Assistance · FOCOM" />
+    <meta property="og:title" content="Free Assistance — Le nouveau site arrive" />
+    <meta
+      property="og:description"
+      content="Une seule adresse pour présenter la nouvelle structure Free Assistance et les entités qui la composent."
+    />
+    <meta property="og:url" content="https://fa.focom-iliad.fr/" />
+    <meta property="og:image" content="https://fa.focom-iliad.fr/logo-focom-fond-rouge.png" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Free Assistance — Le nouveau site arrive" />
+    <meta
+      name="twitter:description"
+      content="Une seule adresse pour présenter la nouvelle structure Free Assistance."
+    />
+    <title>Free Assistance — Le nouveau site arrive | FOCOM</title>
+    <style>
+      :root {
+        --accent: #eb2741;
+        --ink: #fffdf8;
+        --ink-soft: rgba(255, 253, 248, 0.66);
+        --ink-faint: rgba(255, 253, 248, 0.42);
+        --line: rgba(255, 253, 248, 0.13);
+        --surface: #121114;
+        color-scheme: dark;
+        font-family: "Avenir Next", "Segoe UI", Helvetica, Arial, sans-serif;
+        font-synthesis: none;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        min-width: 320px;
+        background: var(--surface);
+      }
+
+      body {
+        min-width: 320px;
+        min-height: 100vh;
+        margin: 0;
+        overflow-x: hidden;
+        background: var(--surface);
+        color: var(--ink);
+      }
+
+      .cover {
+        position: relative;
+        isolation: isolate;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        width: 100%;
+        min-height: 100svh;
+        padding:
+          max(28px, env(safe-area-inset-top))
+          clamp(22px, 4.8vw, 76px)
+          max(24px, env(safe-area-inset-bottom));
+        overflow: hidden;
+        background:
+          radial-gradient(circle at 88% 10%, rgba(235, 39, 65, 0.17), transparent 31%),
+          radial-gradient(circle at 3% 96%, rgba(255, 253, 248, 0.055), transparent 29%),
+          linear-gradient(135deg, #151417 0%, #0d0c0e 64%, #171216 100%);
+      }
+
+      .cover::before {
+        position: absolute;
+        z-index: -1;
+        top: -7%;
+        right: -2.5vw;
+        width: min(55vw, 760px);
+        height: min(68vw, 820px);
+        border: 1px solid rgba(235, 39, 65, 0.23);
+        border-radius: 50%;
+        content: "";
+        transform: rotate(-13deg);
+      }
+
+      .cover::after {
+        position: absolute;
+        z-index: -1;
+        top: -3%;
+        right: 6vw;
+        width: 1px;
+        height: 72%;
+        content: "";
+        background: linear-gradient(transparent, var(--line) 15%, var(--line) 80%, transparent);
+        transform: rotate(18deg);
+      }
+
+      .masthead {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding-bottom: clamp(30px, 5vh, 58px);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+      }
+
+      .brand-logo {
+        display: block;
+        width: 48px;
+        height: 48px;
+        object-fit: contain;
+      }
+
+      .brand-copy {
+        display: grid;
+        gap: 2px;
+        text-transform: uppercase;
+      }
+
+      .brand-copy strong {
+        font-size: 0.83rem;
+        font-weight: 800;
+        letter-spacing: 0.18em;
+      }
+
+      .brand-copy span {
+        color: var(--ink-soft);
+        font-size: 0.62rem;
+        font-weight: 650;
+        letter-spacing: 0.2em;
+      }
+
+      .domain {
+        color: var(--ink-soft);
+        font-size: 0.69rem;
+        font-weight: 650;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .hero {
+        width: 100%;
+        min-width: 0;
+        align-self: center;
+        display: grid;
+        grid-template-columns: minmax(0, 1.72fr) minmax(260px, 0.68fr);
+        align-items: end;
+        gap: clamp(38px, 6vw, 110px);
+        padding: clamp(12px, 2.5vh, 34px) 0 clamp(50px, 8vh, 104px);
+      }
+
+      .hero-main {
+        overflow: hidden;
+        min-width: 0;
+      }
+
+      .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: clamp(24px, 3.5vh, 40px);
+        color: var(--ink-soft);
+        font-size: clamp(0.65rem, 0.72vw, 0.78rem);
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      .status::before {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--accent);
+        box-shadow: 0 0 0 5px rgba(235, 39, 65, 0.12);
+        content: "";
+      }
+
+      h1 {
+        max-width: 10ch;
+        margin: 0;
+        font-family: "Arial Black", "Avenir Next", "Segoe UI", sans-serif;
+        font-size: clamp(4.1rem, 10.4vw, 10.5rem);
+        font-weight: 900;
+        line-height: 0.83;
+        letter-spacing: -0.075em;
+        text-transform: uppercase;
+      }
+
+      h1 span {
+        display: block;
+        animation: reveal 900ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+      }
+
+      h1 span:last-child {
+        color: var(--accent);
+        animation-delay: 110ms;
+      }
+
+      .hero-aside {
+        min-width: 0;
+        display: grid;
+        align-self: end;
+        gap: clamp(24px, 4vh, 42px);
+        padding-left: clamp(20px, 2.4vw, 34px);
+        border-left: 1px solid var(--line);
+        animation: rise 900ms 250ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+      }
+
+      .lead {
+        max-width: 34ch;
+        margin: 0;
+        font-size: clamp(1rem, 1.28vw, 1.24rem);
+        font-weight: 520;
+        line-height: 1.58;
+      }
+
+      .date-block {
+        display: grid;
+        gap: 7px;
+      }
+
+      .date-block strong {
+        font-size: clamp(1.6rem, 2.2vw, 2.25rem);
+        font-variant-numeric: tabular-nums;
+        letter-spacing: -0.04em;
+      }
+
+      .date-block span {
+        color: var(--ink-faint);
+        font-size: 0.64rem;
+        font-weight: 700;
+        letter-spacing: 0.17em;
+        text-transform: uppercase;
+      }
+
+      .entities {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 0;
+        margin: 0;
+        padding: 0;
+        color: var(--ink-soft);
+        font-size: clamp(0.67rem, 0.82vw, 0.78rem);
+        font-weight: 650;
+        letter-spacing: 0.08em;
+        list-style: none;
+        text-transform: uppercase;
+      }
+
+      .entities li {
+        display: inline-flex;
+        align-items: center;
+        flex-shrink: 0;
+      }
+
+      .entities li:not(:last-child)::after {
+        width: 3px;
+        height: 3px;
+        margin: 0 10px;
+        border-radius: 50%;
+        background: var(--accent);
+        content: "";
+      }
+
+      .footer {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 24px;
+        padding-top: 20px;
+        border-top: 1px solid var(--line);
+        color: var(--ink-faint);
+        font-size: 0.61rem;
+        font-weight: 700;
+        letter-spacing: 0.17em;
+        text-transform: uppercase;
+      }
+
+      .footer p {
+        margin: 0;
+      }
+
+      .footer .signature {
+        color: var(--ink-soft);
+      }
+
+      @keyframes reveal {
+        from {
+          opacity: 0;
+          transform: translateY(0.28em);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 900px) {
+        .cover {
+          min-height: 100svh;
+        }
+
+        .hero {
+          grid-template-columns: minmax(0, 1fr);
+          align-content: center;
+          align-items: start;
+          gap: 40px;
+          padding-top: 34px;
+          padding-bottom: 54px;
+        }
+
+        h1 {
+          max-width: 8ch;
+          font-size: clamp(4rem, 17.8vw, 8rem);
+        }
+
+        .hero-aside {
+          max-width: 620px;
+          padding-left: 0;
+          border-top: 1px solid var(--line);
+          border-left: 0;
+          padding-top: 24px;
+        }
+      }
+
+      @media (max-width: 520px) {
+        .cover {
+          padding-inline: 20px;
+        }
+
+        .masthead {
+          min-width: 0;
+          align-items: flex-start;
+          padding-bottom: 28px;
+        }
+
+        .brand {
+          min-width: 0;
+          gap: 10px;
+        }
+
+        .brand-logo {
+          width: 42px;
+          height: 42px;
+        }
+
+        .domain {
+          max-width: 12ch;
+          padding-top: 3px;
+          font-size: 0.58rem;
+          line-height: 1.4;
+          text-align: right;
+        }
+
+        .hero {
+          gap: 30px;
+          padding-bottom: 42px;
+        }
+
+        h1 {
+          font-size: clamp(1.95rem, 9.6vw, 3.9rem);
+          line-height: 0.91;
+          letter-spacing: -0.085em;
+        }
+
+        .status {
+          margin-bottom: 24px;
+          letter-spacing: 0.13em;
+        }
+
+        .hero-aside {
+          width: 100%;
+          gap: 23px;
+        }
+
+        .footer {
+          align-items: flex-start;
+          gap: 12px;
+          font-size: 0.54rem;
+          letter-spacing: 0.12em;
+          line-height: 1.45;
+        }
+
+        .footer p:last-child {
+          white-space: nowrap;
+          text-align: right;
+        }
+      }
+
+      @media (max-height: 720px) and (min-width: 901px) {
+        .masthead {
+          padding-bottom: 22px;
+        }
+
+        .hero {
+          padding-block: 10px 38px;
+        }
+
+        .status {
+          margin-bottom: 22px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        h1 span,
+        .hero-aside {
+          animation: none;
+        }
+      }
+    </style>
   </head>
   <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
+    <main class="cover" aria-labelledby="page-title">
+      <header class="masthead">
+        <div class="brand" aria-label="FOCOM, groupe Iliad">
+          <img
+            class="brand-logo"
+            src="/logo-focom-fond-rouge.png"
+            width="48"
+            height="48"
+            alt=""
+          />
+          <div class="brand-copy">
+            <strong>FOCOM</strong>
+            <span>Groupe Iliad</span>
+          </div>
+        </div>
+        <p class="domain">fa.focom-iliad.fr</p>
+      </header>
+
+      <section class="hero">
+        <div class="hero-main">
+          <p class="status">Nouveau site en préparation</p>
+          <h1 id="page-title"><span>Free</span><span>Assistance</span></h1>
+        </div>
+
+        <aside class="hero-aside" aria-label="Présentation de Free Assistance">
+          <p class="lead">
+            Le nouveau site de Free Assistance se prépare. Il réunira dans une même
+            adresse les équipes d’assistance à distance et les techniciens de proximité.
+          </p>
+
+          <div class="date-block">
+            <strong>01.08.2026</strong>
+            <span>Date du rapprochement</span>
+          </div>
+
+          <ul class="entities" aria-label="Entités réunies au sein de Free Assistance">
+            <li>Protelco</li>
+            <li>UES MCRA</li>
+            <li>Centrapel</li>
+            <li>Certicall</li>
+            <li>Equaline</li>
+          </ul>
+        </aside>
+      </section>
+
+      <footer class="footer">
+        <p class="signature">FOCOM · Free Assistance</p>
+        <p>Site officiel · préparation en cours</p>
+      </footer>
+    </main>
   </body>
 </html>
