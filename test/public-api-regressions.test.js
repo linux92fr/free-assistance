@@ -3,6 +3,7 @@ import test from "node:test";
 import { readFile } from "node:fs/promises";
 
 const pageUrl = new URL("../index.html", import.meta.url);
+const wranglerUrl = new URL("../wrangler.jsonc", import.meta.url);
 
 test("the public cover page introduces Free Assistance", async () => {
   const html = await readFile(pageUrl, "utf8");
@@ -18,4 +19,11 @@ test("the cover page identifies every integrated entity", async () => {
   for (const entity of ["Protelco", "UES MCRA", "Centrapel", "Certicall", "Equaline"]) {
     assert.match(html, new RegExp(entity));
   }
+});
+
+test("the deployment targets the dedicated Free Assistance Worker", async () => {
+  const config = await readFile(wranglerUrl, "utf8");
+
+  assert.match(config, /"name":\s*"fa-free-assistance"/);
+  assert.doesNotMatch(config, /"name":\s*"fd"/);
 });

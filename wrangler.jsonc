@@ -1,7 +1,7 @@
 {
-  // Keep the existing Worker name so the configured custom domain stays attached.
+  // Dedicated Worker for the Free Assistance cover page.
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "fd",
+  "name": "fa-free-assistance",
   "main": "src/worker.js",
   "compatibility_date": "2026-11-17",
   "assets": {
